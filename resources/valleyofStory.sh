@@ -127,7 +127,7 @@ function deploy_validator_node() {
     echo -e "- This script ${GREEN}DOES NOT${RESET} send any data outside your server"
     echo "- All operations are performed locally"
     echo "- You are encouraged to audit the script at:"
-    echo -e "  ${BLUE}https://github.com/hubofvalley/Mainnet-Guides/blob/main/Story/resources/story_validator_node_install_mainnet.sh${RESET}"
+    echo -e "  ${BLUE}https://github.com/hubofvalley/Valley-of-Story-Mainnet/blob/main/resources/story_validator_node_install_mainnet.sh${RESET}"
 
     echo -e "\n${YELLOW}2. SYSTEM IMPACT:${RESET}"
     echo -e "${GREEN}New Services:${RESET}"
