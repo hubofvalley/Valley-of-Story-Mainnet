@@ -90,9 +90,9 @@ else
 fi
 
 # Consensus client binary
-mkdir -p story-v1.3.3
-wget -O $HOME/story-v1.3.3/story https://github.com/piplabs/story/releases/download/v1.3.3/story-linux-amd64
-cp story-v1.3.3/story $HOME/go/bin/story
+mkdir -p story-v1.4.1
+wget -O $HOME/story-v1.4.1/story https://github.com/piplabs/story/releases/download/v1.4.1/story-linux-amd64
+cp story-v1.4.1/story $HOME/go/bin/story
 sudo chown -R $USER:$USER $HOME/go/bin/story
 sudo chmod +x $HOME/go/bin/story
 
