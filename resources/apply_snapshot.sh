@@ -702,7 +702,7 @@ main_script() {
 
     # Execute the update script if the user chose to update
     if [[ $update_choice == "y" || $update_choice == "Y" ]]; then
-        bash <(curl -s https://raw.githubusercontent.com/hubofvalley/Mainnet-Guides/main/Story/resources/story_update.sh)
+        bash <(curl -s https://raw.githubusercontent.com/hubofvalley/Valley-of-Story-Mainnet/main/resources/story_update.sh)
     fi
 
     # Start your story-geth and story nodes
