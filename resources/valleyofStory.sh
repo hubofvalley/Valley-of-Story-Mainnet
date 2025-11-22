@@ -74,7 +74,7 @@ Grand Valley Story Protocol public endpoints:${RESET}
 - cosmos rest-api: ${BLUE}https://lightnode-api-mainnet-story.grandvalleys.com${RESET}
 - cosmos ws: ${BLUE}wss://lightnode-rpc-mainnet-story.grandvalleys.com/websocket${RESET}
 - evm ws: ${BLUE}wss://lightnode-wss-mainnet-story.grandvalleys.com${RESET}
-- peer: ${BLUE}fffb1a0dc2b6af331c65328c1ed9afad0bf107de@peer-mainnet-story.grandvalleys.com:38656${RESET}
+- peer: ${BLUE}fffb1a0dc2b6af331c65328c1ed9afad0bf107de@peer-mainnet-story.grandvalleys.com:37656${RESET}
 - seed: ${BLUE}68205aae335cffa1e1995f59a6fc8832e434d98a@seed-mainnet-story.grandvalleys.com:38656${RESET}
 - enode: ${BLUE}enode://0c8ac41a0249cbfbdeac561962dd723f80d0a03aec7e9cfa0bee80990e7ec974139ab3e627376725f0afe37e5ae4c36ea7b941f7ebf1742257e2d58eadae58a3@enode-mainnet-story.grandvalleys.com:38303${RESET}
 
@@ -140,8 +140,8 @@ function deploy_validator_node() {
     
     echo -e "\n${GREEN}Port Configuration:${RESET}"
     echo -e "Ports will be adjusted based on your input (example if you enter 38):"
-    echo -e "  • ${CYAN}38657${RESET} (RPC) <-- 26657"
-    echo -e "  • ${CYAN}38656${RESET} (P2P) <-- 26656"
+    echo -e "  • ${CYAN}37657${RESET} (RPC) <-- 26657"
+    echo -e "  • ${CYAN}37656${RESET} (P2P) <-- 26656"
     echo -e "  • ${CYAN}38545${RESET} (EVM-RPC) <-- 8545"
     echo -e "  • ${CYAN}38546${RESET} (WebSocket) <-- 8546"
     
@@ -531,7 +531,7 @@ function add_peers() {
             echo "Grand Valley's peers: $peers"
             read -p "Do you want to proceed? (yes/no): " confirm
             if [[ $confirm == "yes" ]]; then
-                sed -i -e "s|^persistent_peers *=.*|persistent_peers = \"fffb1a0dc2b6af331c65328c1ed9afad0bf107de@peer-mainnet-story.grandvalleys.com:38656,$peers\"|" $HOME/.story/story/config/config.toml
+                sed -i -e "s|^persistent_peers *=.*|persistent_peers = \"fffb1a0dc2b6af331c65328c1ed9afad0bf107de@peer-mainnet-story.grandvalleys.com:37656,$peers\"|" $HOME/.story/story/config/config.toml
                 echo "Grand Valley's peers added."
             else
                 echo "Operation cancelled. Returning to menu."
