@@ -22,14 +22,14 @@ init_cosmovisor() {
     echo "Initializing cosmovisor..."
 
     # Download genesis story version
-    mkdir -p story-v1.3.3
-    if ! wget -p $HOME/story-v1.3.3 https://github.com/piplabs/story/releases/download/v1.3.3/story-linux-amd64 -O $HOME/story-v1.3.3/story; then
+    mkdir -p story-v1.4.2
+    if ! wget -p $HOME/story-v1.4.2 https://github.com/piplabs/story/releases/download/v1.4.2/story-linux-amd64 -O $HOME/story-v1.4.2/story; then
         echo "Failed to download the genesis binary. Exiting."
         exit 1
     fi
 
     # Initialize cosmovisor
-    if ! cosmovisor init $HOME/story-v1.3.1/story; then
+    if ! cosmovisor init $HOME/story-v1.4.2/story; then
         echo "Failed to initialize cosmovisor. Exiting."
         exit 1
     fi
@@ -163,12 +163,12 @@ batch_update_version() {
     local version2="v1.2.0"
     local version3="v1.3.0"
     local version4="v1.3.1"
-    local version5="v1.3.3"
+    local version5="v1.4.2"
     local download_url1="https://github.com/piplabs/story/releases/download/v1.1.0"
     local download_url2="https://github.com/piplabs/story/releases/download/v1.2.0"
     local download_url3="https://github.com/piplabs/story/releases/download/v1.2.1"
     local download_url4="https://github.com/piplabs/story/releases/download/v1.3.1"
-    local download_url5="https://github.com/piplabs/story/releases/download/v1.3.3"
+    local download_url5="https://github.com/piplabs/story/releases/download/v1.4.2"
     local upgrade_height1=640000
     local upgrade_height2=1398904
     local upgrade_height3=2065886
@@ -252,8 +252,9 @@ echo -e "c. ${YELLOW}v1.2.0${RESET} (${GREEN}Ovid${RESET} Upgrade height: 4,477,
 echo -e "d. ${YELLOW}v1.2.1${RESET} (${GREEN}Validator operations CLI improvements${RESET} Upgrade height: 5,084,300)"
 echo -e "e. ${YELLOW}v1.3.1${RESET} (${GREEN}Residual rewards fix${RESET} Upgrade height: 4,188,998)"
 echo -e "f. ${YELLOW}v1.3.2${RESET} (${GREEN}Polybius${RESET} Upgrade height: 8,270,000)"
-echo -e "g. ${YELLOW}v1.3.3${RESET} (${GREEN}Latest patch${RESET} Upgrade height: $(LC_NUMERIC='en_US.UTF-8' printf "%'d" $((realtime_block_height + 100))))"
+echo -e "g. ${YELLOW}v1.4.2${RESET} (${GREEN}v1.3 Latest patch${RESET} Upgrade height: $(LC_NUMERIC='en_US.UTF-8' printf "%'d" $((realtime_block_height + 100))))"
 echo -e "h. ${YELLOW}v1.4.1${RESET} (${GREEN}Terence${RESET} Upgrade height: $(LC_NUMERIC='en_US.UTF-8' printf "%'d" $((realtime_block_height + 100))))"
+echo -e "i. ${YELLOW}v1.4.2${RESET} (${GREEN}v1.4 critical security issue fix${RESET} Upgrade height: $(LC_NUMERIC='en_US.UTF-8' printf "%'d" $((realtime_block_height + 100))))"
 read -p "Enter the letter corresponding to the version: " choice
 
 case $choice in
@@ -276,10 +277,13 @@ case $choice in
         update_version "v1.3.2" "https://github.com/piplabs/story/releases/download/v1.3.2" 8270000
         ;;
     g)
-        update_version "v1.3.3" "https://github.com/piplabs/story/releases/download/v1.3.3" $((realtime_block_height + 100))
+        update_version "v1.4.2" "https://github.com/piplabs/story/releases/download/v1.4.2" $((realtime_block_height + 100))
         ;;
     h)
         update_version "v1.4.1" "https://github.com/piplabs/story/releases/download/v1.4.1" $((realtime_block_height + 100))
+        ;;
+    i)
+        update_version "v1.4.2" "https://github.com/piplabs/story/releases/download/v1.4.1" $((realtime_block_height + 100))
         ;;
     *)
         echo "Invalid choice. Exiting."
