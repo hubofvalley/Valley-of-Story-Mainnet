@@ -193,7 +193,7 @@ function create_validator() {
 
     echo "PRIVATE_KEY=$PRIVATE_KEY" > $HOME/.story/story/.env
 
-    read -p "Enter the moniker for your validator: " MONIKER
+    read -p "Enter the STORY_MONIKER for your validator: " STORY_MONIKER
 
     read -p "Enter the amount to be staked in IP (e.g., 1024 for 1024 IP, minimum requirement is 1024 IP): " STAKE_IP
 
@@ -260,7 +260,7 @@ function create_validator() {
 
     story validator create \
         --stake "$STAKE" \
-        --moniker "$MONIKER" \
+        --STORY_MONIKER "$STORY_MONIKER" \
         --enc-key-file "$HOME/.story/story/.env" \
         --chain-id 1514 \
         --unlocked="$UNLOCKED_FLAG" \
@@ -638,7 +638,7 @@ function install_story_app() {
     cp story-v1.4.2/story $HOME/go/bin/story
     sudo chown -R $USER:$USER $HOME/go/bin/story
     sudo chmod +x $HOME/go/bin/story
-    story init --network $STORY_CHAIN_ID --moniker gv-story
+    story init --network $STORY_CHAIN_ID --STORY_MONIKER gv-story
     echo -e "${YELLOW}story app installed successfully${RESET}"
     menu
 }
@@ -699,7 +699,7 @@ function show_guidelines() {
     echo "      - Guide: This option will show the logs specifically for Geth."
     echo -e "${GREEN}Validator/Key Interactions:${RESET}"
     echo "   a. Create Validator: Creates a new validator."
-    echo "      - Guide: This option will guide you through creating a new validator. You will need to provide details such as the moniker and staking amount."
+    echo "      - Guide: This option will guide you through creating a new validator. You will need to provide details such as the STORY_MONIKER and staking amount."
     echo "   b. Query Validator Public Key: Queries the validator public key."
     echo "      - Guide: Use this option to retrieve the public key of your validator. This key is essential for staking and other operations."
     echo "   c. Query Balance: Queries the balance of an EVM address."

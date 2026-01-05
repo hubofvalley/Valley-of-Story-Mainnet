@@ -12,8 +12,8 @@ LOGO="
 
 echo "$LOGO"
 
-# Prompt for MONIKER, STORY_PORT, and Indexer option
-read -p "Enter your moniker: " MONIKER
+# Prompt for STORY_MONIKER, STORY_PORT, and Indexer option
+read -p "Enter your STORY_MONIKER: " STORY_MONIKER
 read -p "Enter your preferred port number: (leave empty to use default: 26)" STORY_PORT
 if [ -z "$STORY_PORT" ]; then
     STORY_PORT=26
@@ -49,10 +49,10 @@ go version
 go install cosmossdk.io/tools/cosmovisor/cmd/cosmovisor@latest
 
 # 4. Set environment variables
-export MONIKER=$MONIKER
+export STORY_MONIKER=$STORY_MONIKER
 export STORY_CHAIN_ID="story"
 export STORY_PORT=$STORY_PORT
-echo "export MONIKER=\"$MONIKER\"" >> $HOME/.bash_profile
+echo "export STORY_MONIKER=\"$STORY_MONIKER\"" >> $HOME/.bash_profile
 echo "export STORY_CHAIN_ID=\"story\"" >> $HOME/.bash_profile
 echo "export STORY_PORT=\"$STORY_PORT\"" >> $HOME/.bash_profile
 source $HOME/.bash_profile
@@ -97,7 +97,7 @@ sudo chown -R $USER:$USER $HOME/go/bin/story
 sudo chmod +x $HOME/go/bin/story
 
 # 6. Initialize the app
-story init --network $STORY_CHAIN_ID --moniker $MONIKER
+story init --network $STORY_CHAIN_ID --STORY_MONIKER $STORY_MONIKER
 
 # 7. Set custom ports in config.toml and story.toml
 sed -i.bak -e "s%laddr = \"tcp://0.0.0.0:26656\"%laddr = \"tcp://0.0.0.0:${STORY_PORT}656\"%;
