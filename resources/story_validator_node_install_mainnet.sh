@@ -19,6 +19,7 @@ if [ -z "$STORY_PORT" ]; then
     STORY_PORT=26
 fi
 read -p "Do you want to enable the indexer? (yes/no): " ENABLE_INDEXER
+read -p "Configure UFW firewall rules for 0G? (y/n): " SETUP_UFW
 
 # Stop and remove existing Story node
 sudo systemctl daemon-reload
@@ -56,6 +57,17 @@ echo "export STORY_MONIKER=\"$STORY_MONIKER\"" >> $HOME/.bash_profile
 echo "export STORY_CHAIN_ID=\"story\"" >> $HOME/.bash_profile
 echo "export STORY_PORT=\"$STORY_PORT\"" >> $HOME/.bash_profile
 source $HOME/.bash_profile
+
+# Optional: Configure UFW based on chosen ports
+if [[ "$SETUP_UFW" =~ ^[Yy]$ ]]; then
+    sudo apt install -y ufw
+    sudo ufw allow 22/tcp comment "SSH Access"
+    sudo ufw allow ${STORY_PORT}303/tcp comment "Story-geth P2P"
+    sudo ufw allow ${STORY_PORT}303/udp comment "Story-geth discovery"
+    sudo ufw allow ${STORY_PORT}656/tcp comment "Story CometBFT P2P"
+    sudo ufw --force enable
+    sudo ufw status verbose
+fi
 
 # 5. Download Geth and Consensus Client binaries
 cd $HOME
