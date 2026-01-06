@@ -35,7 +35,7 @@ sed -i "/STORY_/d" $HOME/.bash_profile  2>/dev/null || true
 
 # 1. Install dependencies for building from source
 sudo apt update -y && sudo apt upgrade -y
-sudo apt install -y curl git jq build-essential gcc unzip wget lz4 openssl libssl-dev pkg-config protobuf-compiler clang cmake llvm llvm-dev ufw
+sudo apt install -y curl git jq build-essential gcc unzip wget lz4 openssl libssl-dev pkg-config protobuf-compiler clang cmake llvm llvm-dev
 
 # 2. Install Go
 cd $HOME && ver="1.22.5"
