@@ -604,7 +604,7 @@ function schedule_validator_node() {
     echo -e "${GREEN}- Run:${RESET} sudo apt-get update"
     echo -e "${GREEN}- Install dependency:${RESET} at"
     echo -e "${GREEN}- Enable and start:${RESET} atd (scheduler service)"
-    echo -e "${GREEN}- Schedule:${RESET} stop/disable or restart/enable for ${CYAN}story${RESET} + ${CYAN}story-geth${RESET} via ${ORANGE}at${RESET}"
+    echo -e "${GREEN}- Schedule:${RESET} stop/disable or restart/enable for ${CYAN}stor.service${RESET} + ${CYAN}story-geth.service${RESET} via ${ORANGE}at${RESET}"
     echo -e "\n${YELLOW}Press Enter to continue...${RESET}"
     read -r
     bash <(curl -s https://raw.githubusercontent.com/hubofvalley/Valley-of-Story-Mainnet/main/resources/story_schedule_stop_node.sh)
