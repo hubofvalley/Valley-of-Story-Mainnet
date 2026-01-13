@@ -9,6 +9,9 @@ YELLOW=$'\033[0;33m'
 ORANGE=$'\033[38;5;214m'
 RESET=$'\033[0m'
 
+LOG_DIR="$HOME/.story"
+LOG_FILE="$LOG_DIR/story_schedule_jobs.log"
+
 sudo apt-get update
 sudo apt-get install -y at
 sudo systemctl enable --now atd
@@ -68,12 +71,66 @@ pause_return() {
     read -r -p "${YELLOW}Press Enter to return to the schedule menu...${RESET}"
 }
 
+ensure_log_dir() {
+    mkdir -p "$LOG_DIR"
+}
+
+write_job_log() {
+    local job_id=$1
+    local action_label=$2
+    local dt_human=$3
+    local dt_at=$4
+    ensure_log_dir
+    printf "%s|%s|%s|%s|%s\n" \
+        "$job_id" \
+        "$action_label" \
+        "$dt_human" \
+        "$dt_at" \
+        "$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$LOG_FILE"
+}
+
+get_job_action() {
+    local job_id=$1
+    local line action_label
+    [[ -f "$LOG_FILE" ]] || return 1
+    line=$(awk -F'|' -v id="$job_id" '$1==id {last=$0} END{print last}' "$LOG_FILE")
+    [[ -n "$line" ]] || return 1
+    IFS='|' read -r _id action_label _dt_human _dt_at _created <<< "$line"
+    printf "%s" "$action_label"
+}
+
+remove_job_log() {
+    local job_id=$1
+    local tmp_file
+    [[ -f "$LOG_FILE" ]] || return 0
+    tmp_file=$(mktemp)
+    if ! grep -v "^${job_id}|" "$LOG_FILE" > "$tmp_file"; then
+        true
+    fi
+    mv "$tmp_file" "$LOG_FILE"
+}
+
 list_jobs() {
     echo -e "${CYAN}Queued jobs:${RESET}"
-    if ! sudo atq; then
+    local queue line job_id action_label
+    if ! queue=$(sudo atq 2>/dev/null); then
         echo -e "${RED}Failed to read job queue.${RESET}"
         return 1
     fi
+    if [[ -z "$queue" ]]; then
+        echo -e "${YELLOW}No scheduled jobs.${RESET}"
+        return 0
+    fi
+    while IFS= read -r line; do
+        [[ -z "$line" ]] && continue
+        job_id=${line%%[[:space:]]*}
+        action_label=$(get_job_action "$job_id" || true)
+        if [[ -n "$action_label" ]]; then
+            echo -e "${GREEN}$line${RESET} ${CYAN}| action:${RESET} ${YELLOW}$action_label${RESET}"
+        else
+            echo -e "${GREEN}$line${RESET} ${CYAN}| action:${RESET} ${YELLOW}unknown${RESET}"
+        fi
+    done <<< "$queue"
 }
 
 schedule_jobs() {
@@ -113,7 +170,19 @@ schedule_jobs() {
     DT_AT="$(printf "%04d%02d%02d%02d%02d.%02d" "$Y" "$M" "$D" "$h" "$m" "$s")"
     echo -e "${GREEN}Scheduling $action_label at:${RESET} ${CYAN}$DT_HUMAN${RESET}"
 
-    echo -e "$commands\n" | sudo at -t "$DT_AT"
+    local at_output job_id
+    if ! at_output=$(echo -e "$commands\n" | sudo at -t "$DT_AT" 2>&1); then
+        echo -e "${RED}Failed to schedule job.${RESET}"
+        echo -e "${RED}$at_output${RESET}"
+        return 1
+    fi
+    if [[ $at_output =~ job[[:space:]]+([0-9]+)[[:space:]]+at ]]; then
+        job_id="${BASH_REMATCH[1]}"
+        write_job_log "$job_id" "$action_label" "$DT_HUMAN" "$DT_AT"
+        echo -e "${GREEN}Scheduled job ID:${RESET} ${CYAN}$job_id${RESET}"
+    else
+        echo -e "${YELLOW}Scheduled job, but job ID was not detected.${RESET}"
+    fi
     echo
     if ! list_jobs; then
         return 1
@@ -175,6 +244,7 @@ while true; do
             fi
             if sudo atrm "$JOB_ID"; then
                 echo -e "${GREEN}Removed job ID $JOB_ID.${RESET}"
+                remove_job_log "$JOB_ID"
             else
                 echo -e "${RED}Failed to remove job ID $JOB_ID.${RESET}"
             fi
