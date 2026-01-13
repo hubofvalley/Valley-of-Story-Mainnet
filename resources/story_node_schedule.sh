@@ -16,8 +16,10 @@ sudo apt-get update
 sudo apt-get install -y at
 sudo systemctl enable --now atd
 
-echo -e "${CYAN}Current server time:${RESET}"
-echo -e "${GREEN}$(date)${RESET}"
+echo -e "${CYAN}Current server time (UTC):${RESET}"
+echo -e "${GREEN}$(date -u)${RESET}"
+echo
+echo -e "${YELLOW}Note: All input times are interpreted as UTC and will be scheduled for the equivalent local time on the server.${RESET}"
 echo
 
 read_year() {
@@ -166,9 +168,16 @@ schedule_jobs() {
         return 2
     fi
 
-    DT_HUMAN="$(printf "%04d-%02d-%02d %02d:%02d:%02d" "$Y" "$M" "$D" "$h" "$m" "$s")"
-    DT_AT="$(printf "%04d%02d%02d%02d%02d.%02d" "$Y" "$M" "$D" "$h" "$m" "$s")"
-    echo -e "${GREEN}Scheduling $action_label at:${RESET} ${CYAN}$DT_HUMAN${RESET}"
+    DT_HUMAN_UTC="$(printf "%04d-%02d-%02d %02d:%02d:%02d UTC" "$Y" "$M" "$D" "$h" "$m" "$s")"
+    # Validate the UTC datetime and convert to epoch (this will fail if the date is invalid, e.g., Feb 30)
+    if ! epoch=$(date -u -d "$DT_HUMAN_UTC" +%s 2>/dev/null); then
+        echo -e "${RED}Invalid date/time (does not exist in UTC).${RESET}"
+        return 2
+    fi
+    # Convert epoch to server local time for `at -t` (at interprets timestamps in local timezone)
+    DT_AT="$(date -d "@$epoch" +%Y%m%d%H%M.%S)"
+    echo -e "${GREEN}Scheduling $action_label at (UTC):${RESET} ${CYAN}$DT_HUMAN_UTC${RESET}"
+    echo -e "${YELLOW}Note:${RESET} the job will be scheduled for the equivalent local time: ${CYAN}$(date -d "@$epoch" '+%Y-%m-%d %H:%M:%S %Z')${RESET}"
 
     local at_output job_id
     if ! at_output=$(echo -e "$commands\n" | sudo at -t "$DT_AT" 2>&1); then
@@ -178,7 +187,7 @@ schedule_jobs() {
     fi
     if [[ $at_output =~ job[[:space:]]+([0-9]+)[[:space:]]+at ]]; then
         job_id="${BASH_REMATCH[1]}"
-        write_job_log "$job_id" "$action_label" "$DT_HUMAN" "$DT_AT"
+        write_job_log "$job_id" "$action_label" "$DT_HUMAN_UTC" "$DT_AT"
         echo -e "${GREEN}Scheduled job ID:${RESET} ${CYAN}$job_id${RESET}"
     else
         echo -e "${YELLOW}Scheduled job, but job ID was not detected.${RESET}"
