@@ -599,6 +599,18 @@ function stop_geth() {
     menu
 }
 
+function schedule_validator_node() {
+    echo -e "${YELLOW}This feature will:${RESET}"
+    echo -e "${GREEN}- Run:${RESET} sudo apt-get update"
+    echo -e "${GREEN}- Install dependency:${RESET} at"
+    echo -e "${GREEN}- Enable and start:${RESET} atd (scheduler service)"
+    echo -e "${GREEN}- Schedule:${RESET} stop/disable or restart/enable for ${CYAN}story${RESET} + ${CYAN}story-geth${RESET} via ${ORANGE}at${RESET}"
+    echo -e "\n${YELLOW}Press Enter to continue...${RESET}"
+    read -r
+    bash <(curl -s https://raw.githubusercontent.com/hubofvalley/Valley-of-Story-Mainnet/main/resources/story_schedule_stop_node.sh)
+    menu
+}
+
 function restart_consensus_client() {
     sudo systemctl daemon-reload
     sudo systemctl restart story
@@ -727,6 +739,8 @@ function show_guidelines() {
     echo "      - Guide: This option will backup your validator key to your home directory. Ensure you keep this key secure."
     echo "   h. Delete Validator Node: Deletes the validator node. Ensure you backup your seeds phrase/EVM-private key and priv_validator_key.json before doing this."
     echo "      - Guide: Use this option to delete your validator node. Make sure to backup all important data before proceeding."
+    echo "   i. Schedule Stop/Restart Validator Node: Schedules stop/disable or restart/enable for consensus and geth services."
+    echo "      - Guide: Use this option to set a time using atd."
     echo -e "${GREEN}Install Story App only: Installs the Story app (v1.4.2) for executing transactions without running the node.${RESET}"
     echo "      - Guide: Use this option to install the Story app if you only need to execute transactions without running a full node."
     echo -e "${GREEN}Show Grand Valley's Endpoints:${RESET}"
@@ -772,6 +786,7 @@ function menu() {
     echo "   f. Stop Geth Only"
     echo "   g. Backup Validator Key (store it to $HOME directory)"
     echo "   h. Delete Validator Node (BACKUP YOUR SEEDS PHRASE/EVM-PRIVATE KEY AND priv_validator_key.json BEFORE YOU DO THIS)"
+    echo "   i. Schedule Stop/Restart Validator Node"
     echo -e "${GREEN}4. Install the Story App (v1.4.2) only to execute transactions without running a node${RESET}"
     echo -e "${GREEN}5. Show Grand Valley's Endpoints${RESET}"
     echo -e "${YELLOW}6. Show Guidelines${RESET}"
@@ -831,6 +846,7 @@ function menu() {
                 f) stop_geth ;;
                 g) backup_validator_key ;;
                 h) delete_validator_node ;;
+                i) schedule_validator_node ;;
                 *) echo "Invalid sub-option. Please try again." ;;
             esac
             ;;
