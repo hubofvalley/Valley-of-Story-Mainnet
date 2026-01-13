@@ -56,22 +56,52 @@ read_range() {
     done
 }
 
-echo -e "${CYAN}Choose action to schedule:${RESET}"
-echo -e "${GREEN}1.${RESET} Stop and disable story services"
-echo -e "${GREEN}2.${RESET} Restart and enable story services"
-echo -e "${GREEN}3.${RESET} Exit"
-read -r -p "Enter choice (1-3): " ACTION
+echo -e "${CYAN}Choose an option:${RESET}"
+echo -e "${GREEN}1.${RESET} List scheduled jobs"
+echo -e "${GREEN}2.${RESET} Stop and disable story services"
+echo -e "${GREEN}3.${RESET} Restart and enable story services"
+echo -e "${GREEN}4.${RESET} Remove a scheduled job"
+echo -e "${GREEN}5.${RESET} Exit"
+read -r -p "${YELLOW}Enter choice (1-5): ${RESET}" ACTION
 
 case "$ACTION" in
     1)
+        echo -e "${CYAN}Queued jobs:${RESET}"
+        if ! sudo atq; then
+            echo -e "${RED}Failed to read job queue.${RESET}"
+            exit 1
+        fi
+        exit 0
+        ;;
+    2)
         ACTION_LABEL="stop/disable"
         COMMANDS=$'systemctl stop story story-geth\nsystemctl disable story story-geth'
         ;;
-    2)
+    3)
         ACTION_LABEL="restart/enable"
         COMMANDS=$'systemctl daemon-reload\nsystemctl enable story story-geth\nsystemctl restart story story-geth'
         ;;
-    3)
+    4)
+        echo -e "${CYAN}Queued jobs:${RESET}"
+        if ! sudo atq; then
+            echo -e "${RED}Failed to read job queue.${RESET}"
+            exit 1
+        fi
+        echo
+        read -r -p "${YELLOW}Enter job ID to remove: ${RESET}" JOB_ID
+        if [[ ! "$JOB_ID" =~ ^[0-9]+$ ]]; then
+            echo -e "${RED}Invalid job ID.${RESET}"
+            exit 1
+        fi
+        if sudo atrm "$JOB_ID"; then
+            echo -e "${GREEN}Removed job ID $JOB_ID.${RESET}"
+        else
+            echo -e "${RED}Failed to remove job ID $JOB_ID.${RESET}"
+            exit 1
+        fi
+        exit 0
+        ;;
+    5)
         echo -e "${YELLOW}Exiting.${RESET}"
         exit 0
         ;;
