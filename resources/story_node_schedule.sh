@@ -103,6 +103,16 @@ get_job_action() {
     printf "%s" "$action_label"
 }
 
+get_job_human_time() {
+    local job_id=$1
+    local line dt_human
+    [[ -f "$LOG_FILE" ]] || return 1
+    line=$(awk -F'|' -v id="$job_id" '$1==id {last=$0} END{print last}' "$LOG_FILE")
+    [[ -n "$line" ]] || return 1
+    IFS='|' read -r _id _action_label dt_human _dt_at _created <<< "$line"
+    printf "%s" "$dt_human"
+}
+
 remove_job_log() {
     local job_id=$1
     local tmp_file
@@ -129,10 +139,11 @@ list_jobs() {
         [[ -z "$line" ]] && continue
         job_id=${line%%[[:space:]]*}
         action_label=$(get_job_action "$job_id" || true)
+        dt_human=$(get_job_human_time "$job_id" || true)
         if [[ -n "$action_label" ]]; then
-            echo -e "${GREEN}$line${RESET} ${CYAN}| action:${RESET} ${YELLOW}$action_label${RESET}"
+            echo -e "${GREEN}$line${RESET} ${CYAN}| action:${RESET} ${YELLOW}$action_label${RESET} ${CYAN}| scheduled:${RESET} ${YELLOW}${dt_human:-unknown}${RESET}"
         else
-            echo -e "${GREEN}$line${RESET} ${CYAN}| action:${RESET} ${YELLOW}unknown${RESET}"
+            echo -e "${GREEN}$line${RESET} ${CYAN}| action:${RESET} ${YELLOW}unknown${RESET} ${CYAN}| scheduled:${RESET} ${YELLOW}${dt_human:-unknown}${RESET}"
         fi
     done <<< "$queue"
 }
@@ -176,13 +187,25 @@ schedule_jobs() {
         echo -e "${RED}Invalid date/time (does not exist in UTC).${RESET}"
         return 2
     fi
+    local sleep_prefix=""
+    if (( s > 0 )); then
+        sleep_prefix="sleep $s"$'\n'
+    fi
     # Convert epoch to server local time for `at -t` (at interprets timestamps in local timezone)
-    DT_AT="$(date -d "@$epoch" +%Y%m%d%H%M.%S)"
+    # atq only shows minute precision, so we handle seconds via an optional sleep.
+    if (( s > 0 )); then
+        DT_AT="$(date -d "@$epoch" +%Y%m%d%H%M.00)"
+    else
+        DT_AT="$(date -d "@$epoch" +%Y%m%d%H%M.00)"
+    fi
     echo -e "${GREEN}Scheduling $action_label at (UTC):${RESET} ${CYAN}$DT_HUMAN_UTC${RESET}"
     echo -e "${YELLOW}Note:${RESET} the job will be scheduled for the equivalent local time: ${CYAN}$(date -d "@$epoch" '+%Y-%m-%d %H:%M:%S %Z')${RESET}"
+    if (( s > 0 )); then
+        echo -e "${YELLOW}Note:${RESET} seconds are handled by sleeping inside the job; atq shows minute precision."
+    fi
 
     local at_output job_id
-    if ! at_output=$(echo -e "$commands\n" | sudo at -t "$DT_AT" 2>&1); then
+    if ! at_output=$(echo -e "${sleep_prefix}${commands}\n" | sudo at -t "$DT_AT" 2>&1); then
         echo -e "${RED}Failed to schedule job.${RESET}"
         echo -e "${RED}$at_output${RESET}"
         return 1
