@@ -1,21 +1,33 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+RED=$'\033[0;31m'
+GREEN=$'\033[0;32m'
+BLUE=$'\033[0;34m'
+CYAN=$'\033[0;36m'
+YELLOW=$'\033[0;33m'
+ORANGE=$'\033[38;5;214m'
+RESET=$'\033[0m'
+
 sudo apt-get update
 sudo apt-get install -y at
 sudo systemctl enable --now atd
 
+echo -e "${CYAN}Current server time:${RESET}"
+echo -e "${GREEN}$(date)${RESET}"
+echo
+
 read_year() {
     local val num
     while true; do
-        read -r -p "year (4 digits): " val
+        read -r -p "${YELLOW}year (4 digits): ${RESET}" val
         if [[ ! "$val" =~ ^[0-9]{4}$ ]]; then
-            echo "Please enter a 4-digit year (e.g., 2026)."
+            echo -e "${RED}Please enter a 4-digit year (e.g., 2026).${RESET}"
             continue
         fi
         num=$((10#$val))
         if (( num < 1970 || num > 2099 )); then
-            echo "Please enter a year between 1970 and 2099."
+            echo -e "${RED}Please enter a year between 1970 and 2099.${RESET}"
             continue
         fi
         echo "$num"
@@ -29,14 +41,14 @@ read_range() {
     local max=$3
     local val num
     while true; do
-        read -r -p "$prompt" val
+        read -r -p "${YELLOW}${prompt}${RESET}" val
         if [[ ! "$val" =~ ^[0-9]+$ ]]; then
-            echo "Please enter numbers only."
+            echo -e "${RED}Please enter numbers only.${RESET}"
             continue
         fi
         num=$((10#$val))
         if (( num < min || num > max )); then
-            echo "Please enter a value between $min and $max."
+            echo -e "${RED}Please enter a value between $min and $max.${RESET}"
             continue
         fi
         echo "$num"
@@ -44,10 +56,10 @@ read_range() {
     done
 }
 
-echo "Choose action to schedule:"
-echo "1. Stop and disable story services"
-echo "2. Restart and enable story services"
-echo "3. Exit"
+echo -e "${CYAN}Choose action to schedule:${RESET}"
+echo -e "${GREEN}1.${RESET} Stop and disable story services"
+echo -e "${GREEN}2.${RESET} Restart and enable story services"
+echo -e "${GREEN}3.${RESET} Exit"
 read -r -p "Enter choice (1-3): " ACTION
 
 case "$ACTION" in
@@ -60,23 +72,23 @@ case "$ACTION" in
         COMMANDS=$'systemctl daemon-reload\nsystemctl enable story story-geth\nsystemctl restart story story-geth'
         ;;
     3)
-        echo "Exiting."
+        echo -e "${YELLOW}Exiting.${RESET}"
         exit 0
         ;;
     *)
-        echo "Invalid choice. Exiting."
+        echo -e "${RED}Invalid choice. Exiting.${RESET}"
         exit 1
         ;;
 esac
 
 echo
-echo "This will schedule:"
-echo -e "$COMMANDS"
+echo -e "${CYAN}This will schedule:${RESET}"
+echo -e "${GREEN}$COMMANDS${RESET}"
 echo
-echo "Example input:"
-echo "  year=2026 month=1 day=13 hour=6 minute=31 second=0"
-echo "Note: you can enter 1 or 2 digits for month/day/hour/minute/second (e.g., 6 or 06)."
-echo "Note: scheduled jobs run as root because sudo at is used."
+echo -e "${CYAN}Example input:${RESET}"
+echo -e "  ${GREEN}year=2026 month=1 day=13 hour=6 minute=31 second=0${RESET}"
+echo -e "${YELLOW}Note:${RESET} you can enter 1 or 2 digits for month/day/hour/minute/second (e.g., 6 or 06)."
+echo -e "${YELLOW}Note:${RESET} scheduled jobs run as root because sudo at is used."
 echo
 
 Y=$(read_year)
@@ -88,10 +100,10 @@ s=$(read_range "second (0-59): " 0 59)
 
 DT_HUMAN="$(printf "%04d-%02d-%02d %02d:%02d:%02d" "$Y" "$M" "$D" "$h" "$m" "$s")"
 DT_AT="$(printf "%04d%02d%02d%02d%02d.%02d" "$Y" "$M" "$D" "$h" "$m" "$s")"
-echo "Scheduling $ACTION_LABEL at: $DT_HUMAN"
+echo -e "${GREEN}Scheduling $ACTION_LABEL at:${RESET} ${CYAN}$DT_HUMAN${RESET}"
 
 echo -e "$COMMANDS\n" | sudo at -t "$DT_AT"
 
 echo
-echo "Queued jobs:"
+echo -e "${CYAN}Queued jobs:${RESET}"
 sudo atq
