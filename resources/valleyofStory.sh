@@ -608,7 +608,7 @@ function schedule_validator_node() {
     echo -e "${GREEN}- List or remove:${RESET} scheduled jobs from the at queue"
     echo -e "\n${YELLOW}Press Enter to continue...${RESET}"
     read -r
-    bash <(curl -s https://raw.githubusercontent.com/hubofvalley/Valley-of-Story-Mainnet/main/resources/story_schedule_stop_node.sh)
+    bash <(curl -s https://raw.githubusercontent.com/hubofvalley/Valley-of-Story-Mainnet/main/resources/story_node_schedule.sh)
     menu
 }
 
