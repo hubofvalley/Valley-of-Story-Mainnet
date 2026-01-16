@@ -111,7 +111,7 @@ sudo chown -R $USER:$USER $HOME/go/bin/story
 sudo chmod +x $HOME/go/bin/story
 
 # 6. Initialize the app
-story init --network $STORY_CHAIN_ID --STORY_MONIKER $STORY_MONIKER
+story init --network $STORY_CHAIN_ID --moniker $STORY_MONIKER
 
 # 7. Set custom ports in config.toml and story.toml
 sed -i.bak -e "s%laddr = \"tcp://0.0.0.0:26656\"%laddr = \"tcp://0.0.0.0:${STORY_PORT}656\"%;
