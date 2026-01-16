@@ -260,7 +260,7 @@ function create_validator() {
 
     story validator create \
         --stake "$STAKE" \
-        --STORY_MONIKER "$STORY_MONIKER" \
+        --moniker "$STORY_MONIKER" \
         --enc-key-file "$HOME/.story/story/.env" \
         --chain-id 1514 \
         --unlocked="$UNLOCKED_FLAG" \
@@ -656,7 +656,7 @@ function install_story_app() {
     cp story-v1.4.2/story $HOME/go/bin/story
     sudo chown -R $USER:$USER $HOME/go/bin/story
     sudo chmod +x $HOME/go/bin/story
-    story init --network $STORY_CHAIN_ID --STORY_MONIKER gv-story
+    story init --network $STORY_CHAIN_ID --moniker gv-story
     echo -e "${YELLOW}story app installed successfully${RESET}"
     menu
 }
