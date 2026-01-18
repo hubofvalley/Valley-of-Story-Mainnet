@@ -25,7 +25,7 @@ A validator node participates in Story Protocol's consensus mechanism by validat
 
 1. Launch Valley of Story:
    ```bash
-   bash <(curl -s https://raw.githubusercontent.com/hubofvalley/Valley-of-Story-Mainnet/main/resources/valleyofStory.sh)
+   bash <(curl -s https://raw.githubusercontent.com/hubofvalley/Mainnet-Guides/main/Story/resources/valleyofStory.sh)
    ```
 2. Select **"Node Interactions"** → **"Deploy/re-Deploy Validator Node"**
 3. Follow the interactive prompts

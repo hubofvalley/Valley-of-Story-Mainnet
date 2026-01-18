@@ -30,7 +30,7 @@ Migrate an existing validator to Cosmovisor without updating:
 
 1. Launch Valley of Story:
    ```bash
-   bash <(curl -s https://raw.githubusercontent.com/hubofvalley/Valley-of-Story-Mainnet/main/resources/valleyofStory.sh)
+   bash <(curl -s https://raw.githubusercontent.com/hubofvalley/Mainnet-Guides/main/Story/resources/valleyofStory.sh)
    ```
 2. Select **"Node Interactions"** → **"Manage Consensus Client"** → **"Migrate to Cosmovisor only"**
 

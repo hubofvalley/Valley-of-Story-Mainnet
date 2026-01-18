@@ -34,7 +34,7 @@ Valley of Story Mainnet is an open-source project by **Grand Valley** that provi
 Run the main interactive menu:
 
 ```bash
-bash <(curl -s https://raw.githubusercontent.com/hubofvalley/Valley-of-Story-Mainnet/main/resources/valleyofStory.sh)
+bash <(curl -s https://raw.githubusercontent.com/hubofvalley/Mainnet-Guides/main/Story/resources/valleyofStory.sh)
 ```
 
 ## 📦 Features

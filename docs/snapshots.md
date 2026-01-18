@@ -17,7 +17,7 @@ Snapshots allow you to quickly sync your node by downloading a pre-synced databa
 
 1. Launch Valley of Story:
    ```bash
-   bash <(curl -s https://raw.githubusercontent.com/hubofvalley/Valley-of-Story-Mainnet/main/resources/valleyofStory.sh)
+   bash <(curl -s https://raw.githubusercontent.com/hubofvalley/Mainnet-Guides/main/Story/resources/valleyofStory.sh)
    ```
 2. Select **"Node Interactions"** → **"Apply Snapshot"**
 3. Choose your preferred snapshot provider
