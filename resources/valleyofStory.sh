@@ -94,7 +94,7 @@ Grand Valley Story Protocol public endpoints:${RESET}
 - evm ws: ${BLUE}wss://lightnode-wss-mainnet-story.grandvalleys.com${RESET}
 - peer: ${BLUE}fffb1a0dc2b6af331c65328c1ed9afad0bf107de@peer-mainnet-story.grandvalleys.com:37656${RESET}
 - seed: ${BLUE}68205aae335cffa1e1995f59a6fc8832e434d98a@seed-mainnet-story.grandvalleys.com:36656${RESET}
-- enode: ${BLUE}enode://3a46c66eb9978a33dab0cbdc9f28b2627a97935ee71cef5d40547a87b06f5883fd9048a38007c12778ccf01ca4c43ff6d9a044383e791187a3ea6235927dc76@enode-mainnet-story.grandvalleys.com:37303${RESET}
+- enode: ${BLUE}enode://c3be78a24ffc438192c227f457390713de1f8d5dad63a68604f7c750504913583650cf9202ffbf3960f2418183e216842bd8c00cc7f655f370731d415b878656@enode-mainnet-story.grandvalleys.com:37303${RESET}
 
 ${GREEN}Grand Valley Story Mainnet validator profile links:${RESET}
     - ${ORANGE}https://staking.story.foundation/validators/0x0298d2dda1506a0587eb279972Cf7c0e66C51A6f${RESET}
