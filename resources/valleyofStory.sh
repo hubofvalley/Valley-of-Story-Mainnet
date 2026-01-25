@@ -98,8 +98,8 @@ Grand Valley Story Protocol public endpoints:${RESET}
 
 ${GREEN}Grand Valley Story Mainnet validator profile links:${RESET}
     - ${ORANGE}https://staking.story.foundation/validators/0x0298d2dda1506a0587eb279972Cf7c0e66C51A6f${RESET}
-    - ${ORANGE}https://storyscan.app/validators/storyvaloper1q2vd9hdp2p4qtplty7vh9nmupenv2xn0turd4p${RESET}
-    - ${ORANGE}https://story.explorers.guru/validator/storyvaloper1q2vd9hdp2p4qtplty7vh9nmupenv2xn0turd4p${RESET}
+    - ${ORANGE}https://storyscan.app/validators/storyvaloper1tj8a6wyfrdv3fa5lzwrc3v2z98t04cscq8cegj${RESET}
+    - ${ORANGE}https://story.explorers.guru/validator/storyvaloper1tj8a6wyfrdv3fa5lzwrc3v2z98t04cscq8cegj${RESET}
 
 ${GREEN}Connect with Story Protocol:${RESET}
 - Official Website: ${BLUE}https://www.story.foundation${RESET}
@@ -205,52 +205,23 @@ function create_validator() {
         sudo apt-get install bc
     fi
 
-    # Encrypted key file path
-    ENC_KEY_FILE="$HOME/.story/story/config/priv_validator_key.enc"
-
-    # Check if encrypted key exists
-    if [ ! -f "$ENC_KEY_FILE" ]; then
-        echo -e "${YELLOW}No encrypted private key found at $ENC_KEY_FILE${RESET}"
-        echo -e "${CYAN}Would you like to encrypt your existing private key? (recommended for security)${RESET}"
-        read -p "Enter your choice (yes/no): " ENCRYPT_CHOICE
-        
-        if [[ "${ENCRYPT_CHOICE,,}" == "yes" ]]; then
-            # Read existing private key
-            PRIVATE_KEY=$(grep -oP '(?<=PRIVATE_KEY=).*' $HOME/.story/story/config/private_key.txt 2>/dev/null)
-            if [ -z "$PRIVATE_KEY" ]; then
-                read -p "Enter your private key: " PRIVATE_KEY
-            fi
-            
-            if [ -z "$PRIVATE_KEY" ]; then
-                echo -e "${RED}Error: No private key found or provided.${RESET}"
-                menu
-                return
-            fi
-            
-            # Create temporary .env file in story home directory
-            echo "PRIVATE_KEY=$PRIVATE_KEY" > $HOME/.env
-            
-            echo -e "${GREEN}Running Story CLI encryption...${RESET}"
-            echo -e "${YELLOW}You will be prompted to create a password for your encrypted key.${RESET}"
-            story key encrypt --enc-key-file "$ENC_KEY_FILE" --chain-id "$STORY_CHAIN_ID"
-            
-            # Cleanup: remove plaintext .env file after encryption
-            rm -f $HOME/.env
-            
-            if [ ! -f "$ENC_KEY_FILE" ]; then
-                echo -e "${RED}Encryption failed or cancelled. Cannot proceed without encrypted key.${RESET}"
-                menu
-                return
-            fi
-            echo -e "${GREEN}Private key encrypted successfully!${RESET}"
-        else
-            echo -e "${RED}Cannot proceed without encrypted key. Please encrypt your key first.${RESET}"
-            menu
-            return
-        fi
+    # Key management: Check local key or ask user
+    PRIVATE_KEY=$(grep -oP '(?<=PRIVATE_KEY=).*' $HOME/.story/story/config/private_key.txt 2>/dev/null)
+    
+    if [ -z "$PRIVATE_KEY" ]; then
+        echo -e "${YELLOW}Private key not found automatically.${RESET}"
+        read -s -p "Enter your private key (hidden input): " PRIVATE_KEY
+        echo ""
     fi
 
-    echo -e "${GREEN}Using encrypted key file: $ENC_KEY_FILE${RESET}"
+    if [ -z "$PRIVATE_KEY" ]; then
+        echo -e "${RED}Error: Private key is required to proceed.${RESET}"
+        menu
+        return
+    fi
+
+    # Create .env file for the transaction
+    echo "PRIVATE_KEY=$PRIVATE_KEY" > $HOME/.env
 
     read -p "Enter the STORY_MONIKER for your validator: " STORY_MONIKER
 
@@ -329,9 +300,11 @@ function create_validator() {
         --commission-rate "$COMMISSION_RATE" \
         --max-commission-change-rate "$MAX_COMMISSION_CHANGE_RATE" \
         --max-commission-rate "$MAX_COMMISSION_RATE" \
-        --enc-key-file "$ENC_KEY_FILE" \
         --keyfile "$HOME/.story/story/config/priv_validator_key.json" \
         --rpc "https://mainnet.storyrpc.io"
+
+    # Cleanup .env
+    rm -f $HOME/.env
     
     menu
 }
@@ -401,7 +374,7 @@ function stake_tokens() {
 
     case $CHOICE in
         1)
-            VALIDATOR_PUBKEY="022199ce81e29408b87c60ee57a25090fcf19514ed35ab85b4549196316c419858"
+            VALIDATOR_PUBKEY="033c0a1163fec36c916b7ed2aa721e5c0ccec8385839b0f73142549a92a4aa6bf0"
             ;;
         2)
             VALIDATOR_PUBKEY=$(story validator export | grep -oP 'Compressed Public Key \(hex\): \K[0-9a-fA-F]+')
@@ -430,43 +403,34 @@ function stake_tokens() {
     AMOUNT=${AMOUNT%%.*}
 
     # Encrypted KEY workflow
-    ENC_KEY_FILE="$HOME/.story/story/config/priv_validator_key.enc"
-    if [ ! -f "$ENC_KEY_FILE" ]; then
-        echo -e "${YELLOW}No encrypted private key found.${RESET}"
-        read -p "Do you want to encrypt your key now? (yes/no): " ENCRYPT_CHOICE
-        if [[ "${ENCRYPT_CHOICE,,}" == "yes" ]]; then
-             # Read existing private key
-            PRIVATE_KEY=$(grep -oP '(?<=PRIVATE_KEY=).*' $HOME/.story/story/config/private_key.txt 2>/dev/null)
-            if [ -z "$PRIVATE_KEY" ]; then
-                read -p "Enter your private key: " PRIVATE_KEY
-            fi
-            
-            if [ -z "$PRIVATE_KEY" ]; then
-                echo -e "${RED}Error: No private key found or provided.${RESET}"
-                menu
-                return
-            fi
-            
-            # Create temporary .env file
-            echo "PRIVATE_KEY=$PRIVATE_KEY" > $HOME/.env
-            
-            story key encrypt --enc-key-file "$ENC_KEY_FILE" --chain-id "$STORY_CHAIN_ID"
-            rm -f $HOME/.env
-        else
-            echo -e "${RED}Operation cancelled. Encrypted key required.${RESET}"
-            menu
-            return
-        fi
+    # Key management: Check local key or ask user
+    PRIVATE_KEY=$(grep -oP '(?<=PRIVATE_KEY=).*' $HOME/.story/story/config/private_key.txt 2>/dev/null)
+    
+    if [ -z "$PRIVATE_KEY" ]; then
+        echo -e "${YELLOW}Private key not found automatically.${RESET}"
+        read -s -p "Enter your private key (hidden input): " PRIVATE_KEY
+        echo ""
     fi
 
+    if [ -z "$PRIVATE_KEY" ]; then
+        echo -e "${RED}Error: Private key is required to proceed.${RESET}"
+        menu
+        return
+    fi
+    # Create .env file
+    echo "PRIVATE_KEY=$PRIVATE_KEY" > $HOME/.env
+
     if [ "$RPC_CHOICE" == "2" ]; then
-        story validator stake --validator-pubkey $VALIDATOR_PUBKEY --stake $AMOUNT --enc-key-file "$ENC_KEY_FILE" --rpc https://lightnode-json-rpc-mainnet-story.grandvalleys.com:443 --chain-id "$STORY_CHAIN_ID"
+        story validator stake --validator-pubkey $VALIDATOR_PUBKEY --stake $AMOUNT --rpc https://lightnode-json-rpc-mainnet-story.grandvalleys.com:443 --chain-id "$STORY_CHAIN_ID"
     elif [ "$RPC_CHOICE" == "1" ]; then
-        story validator stake --validator-pubkey $VALIDATOR_PUBKEY --stake $AMOUNT --enc-key-file "$ENC_KEY_FILE" --chain-id "$STORY_CHAIN_ID"
+        story validator stake --validator-pubkey $VALIDATOR_PUBKEY --stake $AMOUNT --chain-id "$STORY_CHAIN_ID"
     else
         echo "Invalid choice. Please select a valid option."
         stake_tokens
     fi
+
+    # Cleanup .env
+    rm -f $HOME/.env
 
     menu
 }
@@ -480,19 +444,23 @@ function unstake_tokens() {
     fi
 
     echo "Choose an option to unstake tokens:"
-    echo "1. Unstake from self"
-    echo "2. Unstake from another validator"
-    echo "3. Back"
-    read -p "Enter your choice (1/2/3): " CHOICE
+    echo "1. Unstake from Grand Valley"
+    echo "2. Unstake from self"
+    echo "3. Unstake from another validator"
+    echo "4. Back"
+    read -p "Enter your choice (1/2/3/4): " CHOICE
 
     case $CHOICE in
         1)
-            VALIDATOR_PUBKEY=$(story validator export | grep -oP 'Compressed Public Key \(hex\): \K[0-9a-fA-F]+')
+            VALIDATOR_PUBKEY="033c0a1163fec36c916b7ed2aa721e5c0ccec8385839b0f73142549a92a4aa6bf0"
             ;;
         2)
-            read -p "Enter validator pubkey: " VALIDATOR_PUBKEY
+            VALIDATOR_PUBKEY=$(story validator export | grep -oP 'Compressed Public Key \(hex\): \K[0-9a-fA-F]+')
             ;;
         3)
+            read -p "Enter validator pubkey: " VALIDATOR_PUBKEY
+            ;;
+        4)
             menu
             ;;
         *)
@@ -513,43 +481,138 @@ function unstake_tokens() {
     AMOUNT=${AMOUNT%%.*}
 
     # Encrypted KEY workflow
-    ENC_KEY_FILE="$HOME/.story/story/config/priv_validator_key.enc"
-    if [ ! -f "$ENC_KEY_FILE" ]; then
-        echo -e "${YELLOW}No encrypted private key found.${RESET}"
-        read -p "Do you want to encrypt your key now? (yes/no): " ENCRYPT_CHOICE
-        if [[ "${ENCRYPT_CHOICE,,}" == "yes" ]]; then
-             # Read existing private key
-            PRIVATE_KEY=$(grep -oP '(?<=PRIVATE_KEY=).*' $HOME/.story/story/config/private_key.txt 2>/dev/null)
-            if [ -z "$PRIVATE_KEY" ]; then
-                read -p "Enter your private key: " PRIVATE_KEY
-            fi
-            
-            if [ -z "$PRIVATE_KEY" ]; then
-                echo -e "${RED}Error: No private key found or provided.${RESET}"
-                menu
-                return
-            fi
-            
-            # Create temporary .env file
-            echo "PRIVATE_KEY=$PRIVATE_KEY" > $HOME/.env
-            
-            story key encrypt --enc-key-file "$ENC_KEY_FILE" --chain-id "$STORY_CHAIN_ID"
-            rm -f $HOME/.env
-        else
-            echo -e "${RED}Operation cancelled. Encrypted key required.${RESET}"
-            menu
-            return
-        fi
+    # Key management: Check local key or ask user
+    PRIVATE_KEY=$(grep -oP '(?<=PRIVATE_KEY=).*' $HOME/.story/story/config/private_key.txt 2>/dev/null)
+    
+    if [ -z "$PRIVATE_KEY" ]; then
+        echo -e "${YELLOW}Private key not found automatically.${RESET}"
+        read -s -p "Enter your private key (hidden input): " PRIVATE_KEY
+        echo ""
     fi
 
+    if [ -z "$PRIVATE_KEY" ]; then
+        echo -e "${RED}Error: Private key is required to proceed.${RESET}"
+        menu
+        return
+    fi
+    # Create .env file
+    echo "PRIVATE_KEY=$PRIVATE_KEY" > $HOME/.env
+
     if [ "$RPC_CHOICE" == "2" ]; then
-        story validator unstake --validator-pubkey $VALIDATOR_PUBKEY --unstake $AMOUNT --enc-key-file "$ENC_KEY_FILE" --rpc https://lightnode-json-rpc-mainnet-story.grandvalleys.com:443 --chain-id "$STORY_CHAIN_ID"
+        story validator unstake --validator-pubkey $VALIDATOR_PUBKEY --unstake $AMOUNT --rpc https://lightnode-json-rpc-mainnet-story.grandvalleys.com:443 --chain-id "$STORY_CHAIN_ID"
     elif [ "$RPC_CHOICE" == "1" ]; then
-        story validator unstake --validator-pubkey $VALIDATOR_PUBKEY --unstake $AMOUNT --enc-key-file "$ENC_KEY_FILE" --chain-id "$STORY_CHAIN_ID"
+        story validator unstake --validator-pubkey $VALIDATOR_PUBKEY --unstake $AMOUNT --chain-id "$STORY_CHAIN_ID"
     else
         echo "Invalid choice. Please select a valid option."
         unstake_tokens
     fi
+
+    # Cleanup .env
+    rm -f $HOME/.env
+
+    menu
+}
+
+function redelegate_tokens() {
+    # Check if bc is installed
+    if ! command -v bc &> /dev/null; then
+        echo "bc is not installed. Installing bc..."
+        sudo apt-get update
+        sudo apt-get install bc
+    fi
+
+    echo "Choose the source validator to redelegate FROM:"
+    echo "1. Redelegate from self"
+    echo "2. Redelegate from another validator"
+    echo "3. Back"
+    read -p "Enter your choice (1/2/3): " SRC_CHOICE
+
+    case $SRC_CHOICE in
+        1)
+            SRC_VALIDATOR_PUBKEY=$(story validator export | grep -oP 'Compressed Public Key \(hex\): \K[0-9a-fA-F]+')
+            ;;
+        2)
+            read -p "Enter source validator pubkey: " SRC_VALIDATOR_PUBKEY
+            ;;
+        3)
+            menu
+            return
+            ;;
+        *)
+            echo "Invalid choice. Please select a valid option."
+            redelegate_tokens
+            return
+            ;;
+    esac
+
+    echo "Choose the destination validator to redelegate TO:"
+    echo "1. Redelegate to Grand Valley"
+    echo "2. Redelegate to self"
+    echo "3. Redelegate to another validator"
+    echo "4. Back"
+    read -p "Enter your choice (1/2/3/4): " DST_CHOICE
+
+    case $DST_CHOICE in
+        1)
+            DST_VALIDATOR_PUBKEY="033c0a1163fec36c916b7ed2aa721e5c0ccec8385839b0f73142549a92a4aa6bf0"
+            ;;
+        2)
+            DST_VALIDATOR_PUBKEY=$(story validator export | grep -oP 'Compressed Public Key \(hex\): \K[0-9a-fA-F]+')
+            ;;
+        3)
+            read -p "Enter destination validator pubkey: " DST_VALIDATOR_PUBKEY
+            ;;
+        4)
+            menu
+            return
+            ;;
+        *)
+            echo "Invalid choice. Please select a valid option."
+            redelegate_tokens
+            return
+            ;;
+    esac
+
+    echo "Choose the RPC to use:"
+    echo "1. Use default RPC"
+    echo "2. Use Grand Valley's RPC"
+    read -p "Enter your choice (1/2): " RPC_CHOICE
+
+    read -p "Enter the amount to redelegate in IP (e.g., 1024 for 1024 IP): " AMOUNT_IP
+
+    # Convert IP to the required format (assuming 1 IP = 10^18 units)
+    AMOUNT=$(echo "$AMOUNT_IP * 10^18" | bc)
+    AMOUNT=${AMOUNT%%.*}
+
+    # Encrypted KEY workflow
+    # Key management: Check local key or ask user
+    PRIVATE_KEY=$(grep -oP '(?<=PRIVATE_KEY=).*' $HOME/.story/story/config/private_key.txt 2>/dev/null)
+    
+    if [ -z "$PRIVATE_KEY" ]; then
+        echo -e "${YELLOW}Private key not found automatically.${RESET}"
+        read -s -p "Enter your private key (hidden input): " PRIVATE_KEY
+        echo ""
+    fi
+
+    if [ -z "$PRIVATE_KEY" ]; then
+        echo -e "${RED}Error: Private key is required to proceed.${RESET}"
+        menu
+        return
+    fi
+    # Create .env file
+    echo "PRIVATE_KEY=$PRIVATE_KEY" > $HOME/.env
+
+    if [ "$RPC_CHOICE" == "2" ]; then
+        story validator redelegate --validator-src-pubkey $SRC_VALIDATOR_PUBKEY --validator-dst-pubkey $DST_VALIDATOR_PUBKEY --redelegate $AMOUNT --rpc https://lightnode-json-rpc-mainnet-story.grandvalleys.com:443 --chain-id "$STORY_CHAIN_ID"
+    elif [ "$RPC_CHOICE" == "1" ]; then
+        story validator redelegate --validator-src-pubkey $SRC_VALIDATOR_PUBKEY --validator-dst-pubkey $DST_VALIDATOR_PUBKEY --redelegate $AMOUNT --chain-id "$STORY_CHAIN_ID"
+    else
+        echo "Invalid choice. Please select a valid option."
+        redelegate_tokens
+    fi
+
+    # Cleanup .env
+    rm -f $HOME/.env
 
     menu
 }
