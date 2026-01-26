@@ -53,7 +53,7 @@ sudo apt update -y && sudo apt upgrade -y
 sudo apt install -y curl git jq build-essential gcc unzip wget lz4 openssl libssl-dev pkg-config protobuf-compiler clang cmake llvm llvm-dev
 
 # 2. Install Go
-cd $HOME && ver="1.22.5"
+cd $HOME && ver="1.24.0"
 wget "https://golang.org/dl/go$ver.linux-amd64.tar.gz"
 sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf "go$ver.linux-amd64.tar.gz"
 rm "go$ver.linux-amd64.tar.gz"
@@ -117,9 +117,9 @@ else
 fi
 
 # Consensus client binary
-mkdir -p story-v1.4.2
-wget -O $HOME/story-v1.4.2/story https://github.com/piplabs/story/releases/download/v1.4.2/story-linux-amd64
-cp story-v1.4.2/story $HOME/go/bin/story
+mkdir -p story-v1.5.1
+wget -O $HOME/story-v1.5.1/story https://github.com/piplabs/story/releases/download/v1.5.1/story-linux-amd64
+cp story-v1.5.1/story $HOME/go/bin/story
 sudo chown -R $USER:$USER $HOME/go/bin/story
 sudo chmod +x $HOME/go/bin/story
 

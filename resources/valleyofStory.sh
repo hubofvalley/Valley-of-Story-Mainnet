@@ -59,7 +59,7 @@ ${YELLOW}| Category  | Requirements     |
 - consensus client service file name: ${CYAN}${STORY_SERVICE_NAME}.service${RESET}
 - geth service file name: ${CYAN}${STORY_GETH_SERVICE_NAME}.service${RESET}
 - current chain: ${CYAN}story${RESET}
-- current story node version: ${CYAN}v1.4.2${RESET}
+- current story node version: ${CYAN}v1.5.1${RESET}
 - current story-geth node version: ${CYAN}v1.2.0${RESET}
 "
 
@@ -898,6 +898,23 @@ function install_story_app() {
     menu
 }
 
+function update_go() {
+    echo -e "${CYAN}Updating Go to 1.24.0...${RESET}"
+    cd $HOME
+    ver="1.24.0"
+    wget "https://golang.org/dl/go$ver.linux-amd64.tar.gz"
+    sudo rm -rf /usr/local/go
+    sudo tar -C /usr/local -xzf "go$ver.linux-amd64.tar.gz"
+    rm "go$ver.linux-amd64.tar.gz"
+    echo 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin' >> ~/.bash_profile
+    source ~/.bash_profile
+    go version
+    echo -e "${GREEN}Go updated to 1.24.0 successfully.${RESET}"
+    echo -e "${YELLOW}Press Enter to go back to main menu${RESET}"
+    read -r
+    menu
+}
+
 function apply_snapshot() {
     bash <(curl -s https://raw.githubusercontent.com/hubofvalley/Valley-of-Story-Mainnet/main/resources/apply_snapshot.sh)
     menu
@@ -1032,6 +1049,7 @@ function menu() {
     echo "   g. Backup Validator Key (store it to $HOME directory)"
     echo "   h. Delete Validator Node (BACKUP YOUR SEEDS PHRASE/EVM-PRIVATE KEY AND priv_validator_key.json BEFORE YOU DO THIS)"
     echo "   i. Schedule Stop/Restart Validator Node"
+    echo "   j. Update Go Version (v1.24.0)"
     echo -e "${GREEN}4. Install the Story App (v1.4.2) only to execute transactions without running a node${RESET}"
     echo -e "${GREEN}5. Show Grand Valley's Endpoints${RESET}"
     echo -e "${YELLOW}6. Show Guidelines${RESET}"
@@ -1094,6 +1112,7 @@ function menu() {
                 g) backup_validator_key ;;
                 h) delete_validator_node ;;
                 i) schedule_validator_node ;;
+                j) update_go ;;
                 *) echo "Invalid sub-option. Please try again." ;;
             esac
             ;;
