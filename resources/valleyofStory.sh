@@ -96,10 +96,15 @@ Grand Valley Story Protocol public endpoints:${RESET}
 - seed: ${BLUE}68205aae335cffa1e1995f59a6fc8832e434d98a@seed-mainnet-story.grandvalleys.com:36656${RESET}
 - enode: ${BLUE}enode://c3be78a24ffc438192c227f457390713de1f8d5dad63a68604f7c750504913583650cf9202ffbf3960f2418183e216842bd8c00cc7f655f370731d415b878656@enode-mainnet-story.grandvalleys.com:37303${RESET}
 
-${GREEN}Grand Valley Story Mainnet validator profile links:${RESET}
-    - ${ORANGE}https://staking.story.foundation/validators/0x0298d2dda1506a0587eb279972Cf7c0e66C51A6f${RESET}
+${GREEN}Grand Valley Story Mainnet [UNLOCKED] validator profile links:${RESET}
+    - ${ORANGE}https://staking.story.foundation/validators/0x5c8fdd38891b5914f69f138788b14229d6fae218${RESET}
     - ${ORANGE}https://storyscan.app/validators/storyvaloper1tj8a6wyfrdv3fa5lzwrc3v2z98t04cscq8cegj${RESET}
     - ${ORANGE}https://story.explorers.guru/validator/storyvaloper1tj8a6wyfrdv3fa5lzwrc3v2z98t04cscq8cegj${RESET}
+
+${GREEN}Grand Valley Story Mainnet [LOCKED] validator profile links:${RESET}
+    - ${ORANGE}https://staking.story.foundation/validators/0x0298d2dda1506a0587eb279972Cf7c0e66C51A6f${RESET}
+    - ${ORANGE}https://storyscan.app/validators/storyvaloper1q2vd9hdp2p4qtplty7vh9nmupenv2xn0turd4p${RESET}
+    - ${ORANGE}https://story.explorers.guru/validator/storyvaloper1q2vd9hdp2p4qtplty7vh9nmupenv2xn0turd4p${RESET}
 
 ${GREEN}Connect with Story Protocol:${RESET}
 - Official Website: ${BLUE}https://www.story.foundation${RESET}
@@ -1036,7 +1041,7 @@ function menu() {
     echo -e "\n${YELLOW}Please run the following command to apply the changes after exiting the script:${RESET}"
     echo -e "${GREEN}source ~/.bash_profile${RESET}"
     echo -e "${YELLOW}This ensures the environment variables are set in your current bash session.${RESET}"
-    echo -e "Stake your IP with Grand Valley: ${ORANGE}https://staking.story.foundation/validators/0x0298d2dda1506a0587eb279972Cf7c0e66C51A6f${RESET}"
+    echo -e "Stake your IP with Grand Valley: ${ORANGE}https://staking.story.foundation/validators/0x5c8fdd38891b5914f69f138788b14229d6fae218${RESET}"
     echo -e "${GREEN}Let's Buidl Story Together - Grand Valley${RESET}"
     read -p "Choose an option (e.g., 1a or 1 then a): " OPTION
 
