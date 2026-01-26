@@ -967,6 +967,7 @@ function menu() {
     echo "   d. Stake Tokens"
     echo "   e. Unstake Tokens"
     echo "   f. Export EVM Key"
+    echo "   g. Redelegate Tokens"
     echo -e "${GREEN}3. Node Management:${RESET}"
     echo "   a. Restart Validator Node"
     echo "   b. Restart Consensus Client Only"
@@ -1023,6 +1024,7 @@ function menu() {
                 d) stake_tokens ;;
                 e) unstake_tokens ;;
                 f) export_evm_key ;;
+                g) redelegate_tokens ;;
                 *) echo "Invalid sub-option. Please try again." ;;
             esac
             ;;
