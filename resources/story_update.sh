@@ -22,14 +22,14 @@ init_cosmovisor() {
     echo "Initializing cosmovisor..."
 
     # Download genesis story version
-    mkdir -p story-v1.5.1
-    if ! wget -p $HOME/story-v1.5.1 https://github.com/piplabs/story/releases/download/v1.5.1/story-linux-amd64 -O $HOME/story-v1.5.1/story; then
+    mkdir -p story-v1.5.2
+    if ! wget -p $HOME/story-v1.5.2 https://github.com/piplabs/story/releases/download/v1.5.2/story-linux-amd64 -O $HOME/story-v1.5.2/story; then
         echo "Failed to download the genesis binary. Exiting."
         exit 1
     fi
 
     # Initialize cosmovisor
-    if ! cosmovisor init $HOME/story-v1.5.1/story; then
+    if ! cosmovisor init $HOME/story-v1.5.2/story; then
         echo "Failed to initialize cosmovisor. Exiting."
         exit 1
     fi
@@ -255,7 +255,7 @@ echo -e "f. ${YELLOW}v1.3.2${RESET} (${GREEN}Polybius${RESET} Upgrade height: 8,
 echo -e "g. ${YELLOW}v1.4.2${RESET} (${GREEN}v1.3 Latest patch${RESET} Upgrade height: $(LC_NUMERIC='en_US.UTF-8' printf "%'d" $((realtime_block_height + 100))))"
 echo -e "h. ${YELLOW}v1.4.1${RESET} (${GREEN}Terence${RESET} Upgrade height: $(LC_NUMERIC='en_US.UTF-8' printf "%'d" $((realtime_block_height + 100))))"
 echo -e "i. ${YELLOW}v1.4.2${RESET} (${GREEN}v1.4 critical security issue fix${RESET} Upgrade height: $(LC_NUMERIC='en_US.UTF-8' printf "%'d" $((realtime_block_height + 100))))"
-echo -e "j. ${YELLOW}v1.5.1${RESET} (${GREEN}Horace - Mandatory Hardfork${RESET} Upgrade height: $(LC_NUMERIC='en_US.UTF-8' printf "%'d" $((realtime_block_height + 100))))"
+echo -e "j. ${YELLOW}v1.5.2${RESET} (${GREEN}Horace - Mandatory Hardfork${RESET} Upgrade height: $(LC_NUMERIC='en_US.UTF-8' printf "%'d" $((realtime_block_height + 100))))"
 read -p "Enter the letter corresponding to the version: " choice
 
 case $choice in
@@ -287,7 +287,7 @@ case $choice in
         update_version "v1.4.2" "https://github.com/piplabs/story/releases/download/v1.4.2" $((realtime_block_height + 100))
         ;;
     j)
-        update_version "v1.5.1" "https://github.com/piplabs/story/releases/download/v1.5.1" $((realtime_block_height + 100))
+        update_version "v1.5.2" "https://github.com/piplabs/story/releases/download/v1.5.2" $((realtime_block_height + 100))
         ;;
     *)
         echo "Invalid choice. Exiting."
