@@ -888,9 +888,9 @@ function show_geth_logs() {
 
 function install_story_app() {
     echo -e "${YELLOW}This option is only for those who want to execute the transactions without running the node.${RESET}"
-    mkdir -p story-v1.4.2
-    wget -O story-v1.4.2/story https://github.com/piplabs/story/releases/download/v1.4.2/story-linux-amd64
-    cp story-v1.4.2/story $HOME/go/bin/story
+    mkdir -p story-v1.5.2
+    wget -O story-v1.5.2/story https://github.com/piplabs/story/releases/download/v1.5.2/story-linux-amd64
+    cp story-v1.5.2/story $HOME/go/bin/story
     sudo chown -R $USER:$USER $HOME/go/bin/story
     sudo chmod +x $HOME/go/bin/story
     story init --network $STORY_NETWORK_NAME --moniker gv-story --encrypt-priv-key
@@ -1001,7 +1001,7 @@ function show_guidelines() {
     echo "      - Guide: Use this option to delete your validator node. Make sure to backup all important data before proceeding."
     echo "   i. Schedule Stop/Restart Validator Node: Schedules stop/disable or restart/enable for consensus and geth services."
     echo "      - Guide: Use this option to set a time using atd."
-    echo -e "${GREEN}Install Story App only: Installs the Story app (v1.4.2) for executing transactions without running the node.${RESET}"
+    echo -e "${GREEN}Install Story App only: Installs the Story app (v1.5.2) for executing transactions without running the node.${RESET}"
     echo "      - Guide: Use this option to install the Story app if you only need to execute transactions without running a full node."
     echo -e "${GREEN}Show Grand Valley's Endpoints:${RESET}"
     echo "   Displays Grand Valley's public endpoints."
@@ -1050,7 +1050,7 @@ function menu() {
     echo "   h. Delete Validator Node (BACKUP YOUR SEEDS PHRASE/EVM-PRIVATE KEY AND priv_validator_key.json BEFORE YOU DO THIS)"
     echo "   i. Schedule Stop/Restart Validator Node"
     echo "   j. Update Go Version (v1.24.0)"
-    echo -e "${GREEN}4. Install the Story App (v1.4.2) only to execute transactions without running a node${RESET}"
+    echo -e "${GREEN}4. Install the Story App (v1.5.2) only to execute transactions without running a node${RESET}"
     echo -e "${GREEN}5. Show Grand Valley's Endpoints${RESET}"
     echo -e "${YELLOW}6. Show Guidelines${RESET}"
     echo -e "${RED}7. Exit${RESET}"
