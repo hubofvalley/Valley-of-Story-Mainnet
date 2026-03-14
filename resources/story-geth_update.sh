@@ -70,8 +70,7 @@ echo "Choose the version to update to:"
 echo "a. v1.0.2"
 echo "b. v1.1.2 (Cosmas)"
 echo "c. v1.2.0 (Yasunari)"
-# Uncomment and add more versions as needed
-# echo "d. v0.11.0"
+echo "d. v1.2.1"
 
 read -p "Enter the letter corresponding to the version: " choice
 
@@ -85,10 +84,9 @@ case $choice in
     c)
         update_version "v1.2.0" "https://github.com/piplabs/story-geth/releases/download/v1.2.0"
         ;;
-    # Uncomment and add more versions as needed
-    # d)
-    #     update_version "v0.11.0" "https://github.com/piplabs/story-geth/releases/download/v0.11.0"
-    #     ;;
+    d)
+        update_version "v1.2.1" "https://github.com/piplabs/story-geth/releases/download/v1.2.1"
+        ;;
     *)
         echo "Invalid choice. Exiting."
         exit 1
