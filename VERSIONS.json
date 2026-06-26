@@ -10,7 +10,7 @@
     "chain_spec": "mainnet",
     "chain_id": "story",
     "evm_chain_id": 1514,
-    "consensus_default_rpc_port": 26657,
+    "consensus_default_rpc_port": 26658,
     "evm_default_rpc_port": 26545,
     "evm_default_ws_port": 26546,
     "engine_default_authrpc_port": 26551,
