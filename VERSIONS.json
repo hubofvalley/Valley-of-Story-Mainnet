@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.0",
+  "network": "story-mainnet",
+  "human_name": "Valley of Story - Mainnet",
+  "last_updated": "2026-06-27",
+  "source_of_truth": "github.com/hubofvalley/Valley-of-Story-Mainnet (resources/*.sh)",
+  "verification_status": "needs_live_verification",
+  "verification_note": "Initial gv-ops contract seeded from the Valley Story mainnet scripts. Live service state, binary versions, and sync data still need server-side validation.",
+  "chain": {
+    "chain_spec": "mainnet",
+    "chain_id": "story",
+    "evm_chain_id": 1514,
+    "consensus_default_rpc_port": 26657,
+    "evm_default_rpc_port": 26545,
+    "evm_default_ws_port": 26546,
+    "engine_default_authrpc_port": 26551,
+    "go_version": "1.24.0"
+  },
+  "components": {
+    "validator": {
+      "name": "story-mainnet-validator",
+      "role": "validator",
+      "version_model": "direct_component_versions",
+      "version_note": "Story does not use the 0G bundle+ships model. gv-ops compares each live binary against its direct component target version.",
+      "consensus": {
+        "binary": "story",
+        "version_current": "v1.8.0",
+        "release_repo": "https://github.com/piplabs/story",
+        "release_artifact": "story-linux-amd64",
+        "install_source": "resources/story_validator_node_install_mainnet.sh",
+        "update_source": "resources/story_update.sh",
+        "needs_live_verification": true
+      },
+      "execution": {
+        "binary": "geth",
+        "version_current": "v1.2.1",
+        "release_repo": "https://github.com/piplabs/story-geth",
+        "release_artifact": "geth-linux-amd64",
+        "install_source": "resources/story_validator_node_install_mainnet.sh",
+        "update_source": "resources/story-geth_update.sh",
+        "needs_live_verification": true
+      },
+      "services": {
+        "consensus": "story",
+        "execution": "story-geth"
+      },
+      "home_dir": "$HOME/.story",
+      "consensus_home_dir": "$HOME/.story/story",
+      "binary_install_dir": "$HOME/go/bin",
+      "cosmovisor": {
+        "enabled": true,
+        "daemon_name": "story",
+        "daemon_home": "$HOME/.story/story"
+      },
+      "install_script": "resources/story_validator_node_install_mainnet.sh",
+      "update_scripts": [
+        "resources/story_update.sh",
+        "resources/story-geth_update.sh"
+      ],
+      "env_overrides": {
+        "STORY_SERVICE_NAME": "story",
+        "STORY_GETH_SERVICE_NAME": "story-geth",
+        "STORY_CHAIN_ID": "story",
+        "STORY_PORT": "26"
+      }
+    }
+  },
+  "endpoints": {
+    "cosmos_rpc": "https://lightnode-rpc-mainnet-story.grandvalleys.com",
+    "evm_rpc": "https://lightnode-json-rpc-mainnet-story.grandvalleys.com",
+    "cosmos_rest_api": "https://lightnode-api-mainnet-story.grandvalleys.com",
+    "cosmos_websocket": "wss://lightnode-rpc-mainnet-story.grandvalleys.com/websocket",
+    "evm_websocket": "wss://lightnode-wss-mainnet-story.grandvalleys.com",
+    "peer": "fffb1a0dc2b6af331c65328c1ed9afad0bf107de@peer-mainnet-story.grandvalleys.com:37656",
+    "seed": "68205aae335cffa1e1995f59a6fc8832e434d98a@seed-mainnet-story.grandvalleys.com:36656",
+    "enode": "enode://c3be78a24ffc438192c227f457390713de1f8d5dad63a68604f7c750504913583650cf9202ffbf3960f2418183e216842bd8c00cc7f655f370731d415b878656@enode-mainnet-story.grandvalleys.com:37303"
+  },
+  "scripts": {
+    "install_validator": "resources/story_validator_node_install_mainnet.sh",
+    "update_consensus": "resources/story_update.sh",
+    "update_execution": "resources/story-geth_update.sh",
+    "apply_snapshot": "resources/apply_snapshot.sh",
+    "schedule": "resources/story_node_schedule.sh",
+    "menu": "resources/valleyofStory.sh"
+  },
+  "docs": {
+    "mainnet_guide": "https://github.com/hubofvalley/Mainnet-Guides/tree/main/Story"
+  }
+}
