@@ -59,13 +59,8 @@ ${YELLOW}| Category  | Requirements     |
 - consensus client service file name: ${CYAN}${STORY_SERVICE_NAME}.service${RESET}
 - geth service file name: ${CYAN}${STORY_GETH_SERVICE_NAME}.service${RESET}
 - current chain: ${CYAN}story${RESET}
-<<<<<<< Updated upstream
-- current story node version: ${CYAN}v1.5.2${RESET}
-- current story-geth node version: ${CYAN}v1.2.1${RESET}
-=======
 - current story node version: ${CYAN}v1.8.0${RESET}
 - current story-geth node version: ${CYAN}v1.2.0${RESET}
->>>>>>> Stashed changes
 "
 
 PRIVACY_SAFETY_STATEMENT="
@@ -736,11 +731,11 @@ function show_node_status() {
     echo "Execution client peers connected: $execution_peers"
     block_difference=$(( realtime_block_height - node_height ))
     echo "Real-time Block Height: $realtime_block_height"
-    echo -e "${YELLOW}Block Difference:${NC} $block_difference"
+    echo -e "${YELLOW}Block Difference:${RESET} $block_difference"
 
     # Add explanation for negative values
     if (( block_difference < 0 )); then
-        echo -e "${GREEN}Note:${NC} A negative value is normal - this means Story's official RPC block height is currently behind your node's height"
+        echo -e "${GREEN}Note:${RESET} A negative value is normal - this means Story's official RPC block height is currently behind your node's height"
     fi
     echo -e "\n${YELLOW}Press Enter to go back to main menu${RESET}"
     read -r

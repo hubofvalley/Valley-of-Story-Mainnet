@@ -92,7 +92,10 @@ The Valley of Story menu provides:
 
 ## 📖 Documentation
 
-For detailed documentation, see the [docs/](docs/) folder.
+For detailed documentation, see the [docs/](docs/) folder:
+
+- [Usage guide](docs/usage.md) - menu navigation, option reference, safety notes.
+- [Validator node guide](docs/validator-node.md) - node setup and operational details.
 
 ## 🔗 Links
 
