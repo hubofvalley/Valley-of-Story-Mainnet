@@ -2,16 +2,16 @@
 
 This folder contains detailed documentation for the Valley of Story toolkit.
 
-## 📚 Documentation
+## Documentation
 
 | Document | Description |
 |----------|-------------|
-| [validator-node.md](validator-node.md) | Complete guide for validator node deployment, staking, key management, and troubleshooting |
+| [validator-node.md](validator-node.md) | Guide for validator node deployment, staking, key management, and troubleshooting |
 | [cosmovisor.md](cosmovisor.md) | Cosmovisor setup for automatic upgrades, directory structure, and manual operations |
 | [snapshots.md](snapshots.md) | Snapshot application for fast sync, backup procedures, and recovery |
 | [scheduler.md](scheduler.md) | Node scheduling for automated start/stop, maintenance windows, and coordinated upgrades |
 
-## 🚀 Quick Navigation
+## Common tasks
 
 | I want to... | Go to |
 |--------------|-------|
@@ -24,7 +24,7 @@ This folder contains detailed documentation for the Valley of Story toolkit.
 | Backup my keys | [validator-node.md#backup-and-recovery](validator-node.md#backup-and-recovery) |
 | Troubleshoot issues | [validator-node.md#troubleshooting](validator-node.md#troubleshooting) |
 
-## 🔧 Current Versions
+## Current Versions
 
 | Component | Version |
 |-----------|---------|
@@ -33,7 +33,7 @@ This folder contains detailed documentation for the Valley of Story toolkit.
 | Chain | story |
 | Chain ID | 1514 |
 
-## 🌐 Grand Valley Endpoints
+## Grand Valley Endpoints
 
 | Type | URL |
 |------|-----|
@@ -43,7 +43,7 @@ This folder contains detailed documentation for the Valley of Story toolkit.
 | Peer | `fffb1a0dc2b6af331c65328c1ed9afad0bf107de@peer-mainnet-story.grandvalleys.com:37656` |
 | Seed | `68205aae335cffa1e1995f59a6fc8832e434d98a@seed-mainnet-story.grandvalleys.com:36656` |
 
-## ❓ Need Help?
+## Support
 
 - Open an issue on [GitHub](https://github.com/hubofvalley/Valley-of-Story-Mainnet/issues)
 - Email: letsbuidltogether@grandvalleys.com

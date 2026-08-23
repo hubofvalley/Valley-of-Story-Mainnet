@@ -5,7 +5,7 @@
 <h1 align="center">Valley of Story Mainnet</h1>
 
 <p align="center">
-  <strong>A comprehensive toolkit for deploying and managing Story Protocol validator nodes on mainnet</strong>
+  <strong>Toolkit for deploying and managing Story Protocol validator nodes on mainnet</strong>
 </p>
 
 <p align="center">
@@ -16,11 +16,11 @@
 
 ---
 
-## 🚀 Overview
+## Overview
 
 Valley of Story Mainnet is an open-source project by **Grand Valley** that provides automated scripts for deploying and managing Story Protocol validator nodes on mainnet.
 
-## 📋 System Requirements
+## System Requirements
 
 | Category | Requirements |
 |----------|--------------|
@@ -29,7 +29,7 @@ Valley of Story Mainnet is an open-source project by **Grand Valley** that provi
 | Storage | 500+ GB NVMe SSD |
 | Bandwidth | 100+ MBit/s |
 
-## ⚡ Quick Start
+## Getting started
 
 Run the main interactive menu:
 
@@ -37,7 +37,7 @@ Run the main interactive menu:
 bash <(curl -s https://raw.githubusercontent.com/hubofvalley/Mainnet-Guides/main/Story/resources/valleyofStory.sh)
 ```
 
-## 📦 Features
+## Features
 
 The Valley of Story menu provides:
 
@@ -62,7 +62,7 @@ The Valley of Story menu provides:
 - Schedule stop/restart operations
 - Delete validator node
 
-## 🔧 Current Versions
+## Current Versions
 
 | Component | Version |
 |-----------|---------|
@@ -71,7 +71,7 @@ The Valley of Story menu provides:
 | Chain | story |
 | Chain ID | 1514 |
 
-## 🌐 Grand Valley Public Endpoints
+## Grand Valley Public Endpoints
 
 | Type | URL |
 |------|-----|
@@ -83,21 +83,21 @@ The Valley of Story menu provides:
 | Peer | `fffb1a0dc2b6af331c65328c1ed9afad0bf107de@peer-mainnet-story.grandvalleys.com:37656` |
 | Seed | `68205aae335cffa1e1995f59a6fc8832e434d98a@seed-mainnet-story.grandvalleys.com:36656` |
 
-## 🔐 Privacy & Security
+## Privacy & Security
 
 - **No external data storage** - All operations run locally
 - **No phishing links** - All URLs are for legitimate Story operations
 - **Open source** - Full audit trail available
 - Please verify script integrity before running
 
-## 📖 Documentation
+## Documentation
 
 For detailed documentation, see the [docs/](docs/) folder:
 
 - [Usage guide](docs/usage.md) - menu navigation, option reference, safety notes.
 - [Validator node guide](docs/validator-node.md) - node setup and operational details.
 
-## 🔗 Links
+## Links
 
 **Story Protocol:**
 - [Website](https://www.story.foundation) | [Docs](https://docs.story.foundation) | [X/Twitter](https://x.com/StoryProtocol)
@@ -110,10 +110,10 @@ For detailed documentation, see the [docs/](docs/) folder:
 - [StoryScan](https://storyscan.app/validators/storyvaloper1q2vd9hdp2p4qtplty7vh9nmupenv2xn0turd4p)
 - [Story Guru Explorer](https://story.explorers.guru/validator/storyvaloper1q2vd9hdp2p4qtplty7vh9nmupenv2xn0turd4p)
 
-## 📧 Contact
+## Contact
 
 Email: letsbuidltogether@grandvalleys.com
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
